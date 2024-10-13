@@ -12,6 +12,8 @@ class MarsRoverRepository {
       const response = await axios.get(url);
       return strcutureResponse(response.data, 1, "Success");
     } catch (err) {
+      console.log(err);
+
       throw new InvalidEndpointException("Error in fetching Mars Rover Photos");
     }
   }
@@ -24,6 +26,8 @@ class MarsRoverRepository {
       const response = await axios.get(url);
       return strcutureResponse(response.data, 1, "Success");
     } catch (err) {
+      console.log(err);
+
       throw new InvalidEndpointException("Error in fetching Mars Rover Photos");
     }
   }
@@ -36,6 +40,7 @@ class MarsRoverRepository {
       const response = await axios.get(url);
       return strcutureResponse(response.data, 1, "Success");
     } catch (err) {
+      console.log(err);
       throw new InvalidEndpointException(
         "Error in fetching Mars Rover Manifest"
       );

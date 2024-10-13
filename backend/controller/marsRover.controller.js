@@ -7,6 +7,14 @@ class  MarsRoverController {
     }
     async getPhotosBySol(req,res) {
         const {rover_name, sol, camera,page} = req.query || {};
+       
+        if (!rover_name || rover_name === 'undefined') {
+            return res.status(400).json({ message: 'Invalid Rover Name' });
+          }
+
+
+
+
         try {
             const response = await this.marsRoverRepository.getPhotosBySol(rover_name,sol,camera,page);
             res.status(200).send(response);

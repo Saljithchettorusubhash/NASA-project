@@ -3,12 +3,20 @@ import { InvalidEndpointException } from "../exceptions/api.exception.js";
 import { strcutureResponse } from "../utils/common.utils.js";
 
 class ExoplanetRepository {
-    async getConfirmedExoplanets(limit = 10, offset = 0) {
+    async getConfirmedExoplanets({ limit = 10, offset = 0, discoveryMethod, year }) {
+        let query = `SELECT * FROM (SELECT a.*, ROWNUM rnum FROM pscomppars a WHERE 1=1`;
 
-        const url = `https://exoplanetarchive.ipac.caltech.edu/TAP/sync?query=SELECT+*+FROM+(
-                       SELECT+a.*,+ROWNUM+rnum+FROM+pscomppars+a
-                       WHERE+ROWNUM+<=+${offset+limit}) 
-                       WHERE+rnum+>${offset}&format=json`;
+        // Append filters if available
+        if (discoveryMethod) {
+            query += ` AND a.discoverymethod = '${discoveryMethod}'`;
+        }
+        if (year) {
+            query += ` AND a.disc_year = ${year}`;
+        }
+
+        query += ` AND ROWNUM <= ${offset + limit}) WHERE rnum > ${offset}`;
+        const url = `https://exoplanetarchive.ipac.caltech.edu/TAP/sync?query=${encodeURIComponent(query)}&format=json`;
+
         try {
             const response = await axios.get(url, { timeout: 30000 });
             return strcutureResponse(response.data, 1, "Success");
@@ -18,15 +26,22 @@ class ExoplanetRepository {
         }
     }
     // Fetch planets in the habitable zone using the TAP API and correct table 'cumulative'
-    async getHabitableZonePlanets() {
-        const url = `https://exoplanetarchive.ipac.caltech.edu/TAP/sync?query=select+*+from+cumulative+where+koi_teq>180+and+koi_teq<303&format=json`;
+    async getHabitableZonePlanets({ limit = 10, offset = 0 }) {
+        const query = `SELECT * FROM (SELECT a.*, ROWNUM rnum FROM cumulative a 
+                      WHERE koi_teq > 180 AND koi_teq < 303 AND ROWNUM <= ${offset + limit}) 
+                      WHERE rnum > ${offset}`;
+    
+        const url = `https://exoplanetarchive.ipac.caltech.edu/TAP/sync?query=${encodeURIComponent(query)}&format=json`;
+        
         try {
-            const response = await axios.get(url);
+            const response = await axios.get(url, { timeout: 30000 });
             return strcutureResponse(response.data, 1, "Success");
         } catch (err) {
+            console.error('Error fetching habitable zone planets:', err.message);
             throw new InvalidEndpointException("Error in fetching habitable zone planets");
         }
     }
+    
 
     // Fetch host stars using the TAP API and correct table 'ps'
     async getHostStars() {

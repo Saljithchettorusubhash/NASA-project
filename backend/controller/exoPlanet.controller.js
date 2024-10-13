@@ -8,19 +8,30 @@ class ExoplanetController {
 
     // Fetch confirmed exoplanets
     async getConfirmedExoplanets(req, res) {
+        const { limit, offset, discoveryMethod, year } = req.query; // Extract query parameters
+
         try {
-            const response = await this.exoplanetRepository.getConfirmedExoplanets();
+            const response = await this.exoplanetRepository.getConfirmedExoplanets({
+                limit: parseInt(limit) || 10,
+                offset: parseInt(offset) || 0,
+                discoveryMethod,
+                year: year ? parseInt(year) : null
+            });
+
             res.status(200).send(response);
         } catch (err) {
             console.log(`Error occurred: ${err.message}`);
             res.status(500).json({ message: "Error fetching confirmed exoplanets" });
         }
     }
-
     // Fetch planets in the habitable zone
     async getHabitableZonePlanets(req, res) {
+        const { limit, offset } = req.query; 
         try {
-            const response = await this.exoplanetRepository.getHabitableZonePlanets();
+            const response = await this.exoplanetRepository.getHabitableZonePlanets({
+                limit: parseInt(limit) || 10,
+                offset: parseInt(offset) || 0
+            });
             res.status(200).send(response);
         } catch (err) {
             console.log(`Error occurred: ${err.message}`);
