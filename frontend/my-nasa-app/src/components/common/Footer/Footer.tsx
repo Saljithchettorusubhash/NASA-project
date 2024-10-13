@@ -23,10 +23,10 @@ const Footer: React.FC = () => {
             Exoplanets
           </Link>
           <Link to="/donki" className="hover:text-yellow-500 transition-colors duration-300">
-            Space Weather (DONKI)
+             DONKI
           </Link>
           <Link to="/nasaImage" className="hover:text-yellow-500 transition-colors duration-300">
-            NASA Images
+            NASA Gallery
           </Link>
         </div>
       </div>

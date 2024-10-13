@@ -15,7 +15,7 @@ const NavLinks: React.FC = () => {
           <Link to="/donki">DONKI</Link>
         </li>
         <li className="nav-item text-lg">
-          <Link to="/nasaImage">NASA Image</Link>
+          <Link to="/nasaImage">NASA Gallery</Link>
         </li>
       </ul>
     </nav>

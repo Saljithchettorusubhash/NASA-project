@@ -45,7 +45,7 @@ const Menu: React.FC<MenuProps> = ({ onClose }) => {
               href="/nasaImage" 
               className="text-2xl sm:text-3xl lg:text-4xl hover:text-gray-400 transition duration-300"
             >
-              NASA Image
+              NASA Gallery
             </a>
           </li>
         </ul>
