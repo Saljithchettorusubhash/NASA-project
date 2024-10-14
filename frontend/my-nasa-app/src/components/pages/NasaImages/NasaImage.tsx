@@ -3,7 +3,7 @@ import ImageGallery from '../../layout/ImageGallery/ImageGallery'
 import VideoGallery from '../../layout/VideoGallery/VideoGallery'
 
 
-const NasaImage = () => {
+const NasaImage:React.FC = () => {
   return (
     <div>
         <ImageGallery/>

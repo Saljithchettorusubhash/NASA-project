@@ -2,12 +2,17 @@ import React from 'react';
 import ReactPlayer from 'react-player';
 
 interface VideoModalProps {
-  video: any;
+  video: {
+    title: string;
+    links: { href: string }[]; // Define the type for `links`
+    date_created: string;
+    nasa_id: string;
+  };
   onClose: () => void;
 }
 
 const VideoModal: React.FC<VideoModalProps> = ({ video, onClose }) => {
-  const videoLink = video.links?.find((link) => link.href.includes('.mp4'))?.href;
+  const videoLink = video.links?.find((link: { href: string }) => link.href.includes('.mp4'))?.href;
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-75 flex justify-center items-center z-50 p-4">

@@ -7,7 +7,7 @@ import GlobeDetailsWrapper from "../../layout/GlobeDetailsWrapper/GlobeDetailsWr
 
 
 
-const Home = () => {
+const Home:React.FC = () => {
   return (
     <div>
      <BackgroundImage/>

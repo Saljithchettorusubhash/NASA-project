@@ -5,7 +5,7 @@ import GSTDashboard from '../../layout/GSTdashBoard/GSTDashboard'
 import FLRDashboard from '../../layout/FLRDashboard/FLRDashboard'
 
 
-const DonkiPage = () => {
+const DonkiPage:React.FC= () => {
   return (
     <div>
         <DonkiDashboard/>

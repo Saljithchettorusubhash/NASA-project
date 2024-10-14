@@ -1,11 +1,11 @@
 {
   "compilerOptions": {
-    "jsx": "react",
+    "jsx": "react-jsx",  // Updated to "react-jsx" for React 17+ (automatic JSX transform)
     "target": "ES2022",
-    "lib": ["DOM", "ES2023"], // Add "DOM" here
+    "lib": ["DOM", "ES2023"], // Correctly includes the "DOM" library for browser-specific types
     "module": "ESNext",
     "skipLibCheck": true,
-    "moduleResolution": "bundler",
+    "moduleResolution": "node",  // Changed to "node" for better compatibility with Node.js module resolution
     "allowImportingTsExtensions": true,
     "isolatedModules": true,
     "moduleDetection": "force",
@@ -13,7 +13,15 @@
     "strict": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "noFallthroughCasesInSwitch": true
+    "noFallthroughCasesInSwitch": true,
+    "esModuleInterop": true,  // Helps with default imports from CommonJS modules (like React and others)
+    "forceConsistentCasingInFileNames": true,  // Enforce file casing consistency
+    "resolveJsonModule": true,  // Allows importing JSON files
+    "baseUrl": "./",  // Adds a base URL for absolute imports
+    "paths": {
+      "@components/*": ["src/components/*"],  // Example for setting up path aliases
+      "@hooks/*": ["src/hooks/*"]
+    }
   },
   "include": ["src/**/*", "vite.config.ts"]
 }

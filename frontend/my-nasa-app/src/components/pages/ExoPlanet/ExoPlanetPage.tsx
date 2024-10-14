@@ -6,7 +6,7 @@ import exoplanet from '../../../assets/images/exoplanets/exoplanet.jpg'
 import Velocity from '../../layout/Velocity/Velocity'
 
 
-const ExoPlanetPage = () => {
+const ExoPlanetPage:React.FC = () => {
   return (
     <div>
         <Hero

@@ -9,7 +9,20 @@ interface VideoData {
   description: string;
   keywords: string[];
   media_type: string;
-  links: { href: string, rel: string }[];
+  links: { href: string; rel: string }[];
+}
+
+interface NasaApiResponseItem {
+  data: {
+    title: string;
+    nasa_id: string;
+    date_created: string;
+    description: string;
+    keywords: string[];
+    media_type: string;
+  }[];
+  href: string;
+  links: { href: string; rel: string }[];
 }
 
 const useNasaVideoData = (searchQuery: string) => {
@@ -20,17 +33,15 @@ const useNasaVideoData = (searchQuery: string) => {
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
-      console.log('searchQuery...............................', searchQuery);
+      console.log('searchQuery:', searchQuery);
       try {
-        // Fetch video data using the NASA API, filtered by 'video' media type
         const response = await fetchNasaImage(searchQuery);
-        console.log('response...............................', response);
-        const collection = response?.data?.body?.collection?.items || [];
-        console.log('collection...............................', collection);
+        const collection: NasaApiResponseItem[] = response?.data?.body?.collection?.items || [];
+        console.log('collection:', collection);
 
         // Map the API response to extract the relevant fields
-        const mappedItems = collection.map((item: any) => {
-          const itemData = item?.data?.[0];
+        const mappedItems = collection.map((item: NasaApiResponseItem) => {
+          const itemData = item.data[0];
           return {
             title: itemData?.title || 'No title available',
             nasa_id: itemData?.nasa_id || 'No ID available',
@@ -44,12 +55,15 @@ const useNasaVideoData = (searchQuery: string) => {
         });
 
         // Filter only videos from the mapped items
-        const videos = mappedItems.filter(item => item.media_type === 'video');
-        console.log('videos...............................', videos);
+        const videos = mappedItems.filter((item: VideoData) => item.media_type === 'video');
         setData(videos);
         setError(null); // Clear errors if fetch is successful
-      } catch (err: string | any) {
-        setError(err.message || 'Failed to fetch data');
+      } catch (err: unknown) {
+        if (err instanceof Error) {
+          setError(err.message || 'Failed to fetch data');
+        } else {
+          setError('An unknown error occurred');
+        }
         setData([]); 
       } finally {
         setLoading(false); 
