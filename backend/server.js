@@ -4,7 +4,7 @@ import { RoutesLoader } from "./loader/routes.loader.js";
 import { Config } from './Config/Config.js';
 
 
-const port = Number(Config.port) || 3331;
+const port = Number(Config.port) || 3311;
 const app = ExpressLoader.init();
 const version = 'v1';
 RoutesLoader.initRoutes(app,version);
