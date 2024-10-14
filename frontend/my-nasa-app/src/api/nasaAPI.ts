@@ -193,9 +193,11 @@ export const fetchMetaDataById = async (nasaId: string): Promise<any> => {
   }
 };
 
-export const fetchLatestEpicImages = async (): Promise<any> => {
+export const fetchLatestEpicImages = async (page = 1, limit = 10): Promise<any> => {
   try {
-    const response = await fetchRetry(() => apiClient.get(EPIC_ENDPOINTS.EPIC_LATEST));
+    const response = await fetchRetry(() => apiClient.get(EPIC_ENDPOINTS.EPIC_LATEST, {
+      params: { page, limit },  // Add pagination parameters
+    }));
     console.log('Latest EPIC Images Response:', response);
     return response.data.body;
   } catch (error) {
@@ -204,9 +206,11 @@ export const fetchLatestEpicImages = async (): Promise<any> => {
   }
 };
 
-export const fetchEpicImagesByDate = async (date: string): Promise<any> => {
+export const fetchEpicImagesByDate = async (date: string, page = 1, limit = 10): Promise<any> => {
   try {
-    const response = await fetchRetry(() => apiClient.get(EPIC_ENDPOINTS.EPIC_DATE(date)));
+    const response = await fetchRetry(() => apiClient.get(EPIC_ENDPOINTS.EPIC_DATE(date), {
+      params: { page, limit },  // Add pagination parameters
+    }));
     console.log(`EPIC Images for date ${date}:`, response);
     return response.data.body;
   } catch (error) {

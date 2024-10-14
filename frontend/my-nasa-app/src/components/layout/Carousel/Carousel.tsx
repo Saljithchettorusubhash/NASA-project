@@ -5,7 +5,8 @@ import { useEpicImages } from '../../../hooks/useEpicHook';
 const Carousel: React.FC = () => {
   const [activeIndex, setActiveIndex] = useState<number>(0);
   const [validEpicImages, setValidEpicImages] = useState<any[]>([]);
-  const { epicImages, loading, error } = useEpicImages();
+  const [page, setPage] = useState<number>(1);  // Track the current page
+  const { epicImages, loading, error } = useEpicImages(undefined, page, 10);  // Fetch with pagination
 
   const AUTO_CHANGE_INTERVAL = 5000;
 
@@ -87,6 +88,23 @@ const Carousel: React.FC = () => {
             />
           );
         })}
+      </div>
+
+      {/* Pagination Controls */}
+      <div className="absolute bottom-0 left-0 right-0 flex justify-center items-center space-x-2 py-4">
+        <button
+          className="text-white bg-gray-800 px-4 py-2 rounded"
+          onClick={() => setPage((prevPage) => Math.max(prevPage - 1, 1))} // Prevent going to negative pages
+        >
+          Previous
+        </button>
+        <span className="text-white">{`Page ${page}`}</span>
+        <button
+          className="text-white bg-gray-800 px-4 py-2 rounded"
+          onClick={() => setPage((prevPage) => prevPage + 1)}
+        >
+          Next
+        </button>
       </div>
     </div>
   );

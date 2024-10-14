@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import useMarsRoverData from '../../../hooks/useMarsRoverData';
 import Filter from '../../common/Filter/Filter';
+import Spinner from '../Spinner/Spinner';
 
 interface RoverSectionProps {
   roverName: string;
@@ -8,35 +9,15 @@ interface RoverSectionProps {
 
 const RoverSection: React.FC<RoverSectionProps> = ({ roverName }) => {
   const [filter, setFilter] = useState<{ sol: number; camera: string }>({ sol: 1000, camera: '' });
-  const [initialPhotos, setInitialPhotos] = useState<any[]>([]);
   const { roverPhotos, loading, error } = useMarsRoverData(roverName, filter.sol, filter.camera);
 
-  // Save initial data to localStorage and useEffect to persist initial state
-  useEffect(() => {
-    const savedPhotos = localStorage.getItem(`${roverName}-photos`);
-    if (savedPhotos) {
-      setInitialPhotos(JSON.parse(savedPhotos));
-    } else if (roverPhotos.length > 0) {
-      setInitialPhotos(roverPhotos);
-      localStorage.setItem(`${roverName}-photos`, JSON.stringify(roverPhotos));
-    }
-  }, [roverPhotos, roverName]);
-
-  // Use either fetched or stored initial photos
-  const displayedPhotos = roverPhotos.length > 0 ? roverPhotos.slice(0, 6) : initialPhotos.slice(0, 6);
-
-  if (loading && !initialPhotos.length) {
-    return <div className="h-screen w-full flex justify-center items-center">Loading...</div>;
-  }
-
-  if (error && !initialPhotos.length) {
-    return <div className="h-screen w-full flex justify-center items-center">{error}</div>;
-  }
+  // Use fetched rover photos directly without involving local storage
+  const displayedPhotos = roverPhotos.slice(0, 6);
 
   return (
     <section className="rover-section container mx-auto py-12 px-6">
       <div className={`flex flex-col lg:flex-row items-center lg:justify-center gap-8 ${roverName === 'PERSEVERANCE' ? 'lg:flex-row-reverse' : ''}`}>
-        
+        {/* Filter Section */}
         <div className="flex flex-col items-center lg:w-1/3 text-center">
           <h1 className="text-4xl sm:text-5xl lg:text-6xl text-white font-extrabold mb-6">{roverName}</h1>
           <div className="w-full max-w-sm">
@@ -44,8 +25,15 @@ const RoverSection: React.FC<RoverSectionProps> = ({ roverName }) => {
           </div>
         </div>
 
+        {/* Photos Section with Loader */}
         <div className="lg:w-2/3 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
-          {displayedPhotos.length > 0 ? (
+          {loading ? (
+            <Spinner />
+          ) : error ? (
+            <div className="col-span-3 flex justify-center items-center text-white">
+              {error}
+            </div>
+          ) : displayedPhotos.length > 0 ? (
             displayedPhotos.map((photo: any) => (
               <div key={photo.id} className="relative group overflow-hidden rounded-lg shadow-lg">
                 <img

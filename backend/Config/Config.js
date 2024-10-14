@@ -2,7 +2,7 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 export const Config = {
-    NODE_ENV: process.env.NODE_ENV || 'production',
+    NODE_ENV: process.env.NODE_ENV || 'development',
     PORT: process.env.PORT || 3311,
     REDIS_HOST: process.env.REDIS_HOST || '127.0.0.1',
     REDIS_PORT: process.env.REDIS_PORT || 6379,
