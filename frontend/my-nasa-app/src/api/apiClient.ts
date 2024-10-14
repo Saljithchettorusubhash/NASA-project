@@ -5,7 +5,7 @@ import { fetchRetry } from '../utils/fetchRetry'; // Retry function with backoff
 
 const apiClient: AxiosInstance = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL || 'https://nasa-project-9618.onrender.com/api/v1',
-  timeout: 30000,
+  timeout: 60000,
   headers: {
     'Content-Type': 'application/json',
   },
