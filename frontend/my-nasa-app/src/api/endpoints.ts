@@ -32,6 +32,10 @@ export const EPIC_ENDPOINTS = {
   EPIC_DATES: `${BASE_URL}epic/dates`,  
 }
 
+export const ASTEROID_ENDPOINTS = {
+  FEED: `${BASE_URL}asteroid/feed`,
+  BROWSE: (asteroidId: string) => `/asteroids/${asteroidId}/browse`,
+};
 
 
 

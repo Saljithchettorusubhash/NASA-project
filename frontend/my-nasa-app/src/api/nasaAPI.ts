@@ -1,5 +1,5 @@
 import { apiClient } from "./apiClient";
-import { API_ENDPOINTS, DONKI_ENDPOINTS, EPIC_ENDPOINTS, EXO_PLANET_ENDPOINTS, MARS_ROVER_ENDPOINTS, NASA_IMAGE_ENDPOINTS } from "./endpoints";
+import { API_ENDPOINTS, ASTEROID_ENDPOINTS, DONKI_ENDPOINTS, EPIC_ENDPOINTS, EXO_PLANET_ENDPOINTS, MARS_ROVER_ENDPOINTS, NASA_IMAGE_ENDPOINTS } from "./endpoints";
 import { fetchRetry } from '../utils/fetchRetry'; // Import fetchRetry for retry logic
 
 export const fetchAstronomyPictureOfTheDay = async (params: { date?: string, start_date?: string, end_date?: string, count?: number, thumbs?: boolean }): Promise<any> => {
@@ -10,6 +10,18 @@ export const fetchAstronomyPictureOfTheDay = async (params: { date?: string, sta
   } catch (error) {
     console.error('Error fetching APOD:', error);
     throw new Error('Error fetching APOD');
+  }
+};
+export const fetchCarouselApodData = async (): Promise<any[]> => {
+  try {
+    const response = await fetchRetry(() =>
+      apiClient.get('http://localhost:3311/api/v1/apod?count=12')
+    );
+    console.log('APOD Carousel Response:', response);
+    return response.data.body;  // Assuming 'body' contains the image data array
+  } catch (error) {
+    console.error('Error fetching APOD for carousel:', error);
+    throw new Error('Error fetching APOD for carousel');
   }
 };
 
@@ -229,3 +241,31 @@ export const fetchEpicAvailableDates = async (): Promise<any> => {
     throw new Error('Error fetching EPIC available dates');
   }
 };
+
+export const fetchAsteroidFeed = async (startDate: string, endDate: string) => {
+  try {
+      const params = { start_date: startDate, end_date: endDate };
+      const response = await fetchRetry(() => apiClient.get(ASTEROID_ENDPOINTS.FEED, { params }));
+      console.log('Asteroid Feed Response:', response);
+      return response.data.body;
+  } catch (error) {
+      console.error('Error fetching asteroid feed:', error);
+      throw new Error('Error fetching asteroid feed');
+  }
+};
+
+export const fetchAsteroidById = async (asteroidId: number) => {
+  try {
+    // Ensure that BROWSE is a function that takes an ID and returns the URL
+    const response = await fetchRetry(() => apiClient.get(ASTEROID_ENDPOINTS.BROWSE(asteroidId.toString())));
+    console.log(`Asteroid ${asteroidId} Response:`, response);
+    return response.data.body;
+  } catch (error) {
+    console.error(`Error fetching asteroid ${asteroidId}:`, error);
+    throw new Error('Error fetching asteroid by ID');
+  }
+};
+
+
+
+
