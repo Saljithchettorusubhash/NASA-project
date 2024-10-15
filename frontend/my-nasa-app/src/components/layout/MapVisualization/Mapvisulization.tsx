@@ -4,9 +4,10 @@ import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import markerShadow from 'leaflet/dist/images/marker-shadow.png';
 
+// Updated marker with a blue fill for better visibility
 const LocationIconSVG = `
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512">
-    <path d="M215.7 499.2C267 435 384 279.4 384 192C384 86 298 0 192 0S0 86 0 192c0 87.4 117 243 168.3 307.2c12.3 15.3 35.1 15.3 47.4 0zM192 128a64 64 0 1 1 0 128 64 64 0 1 1 0-128z" fill="white"/>
+    <path d="M215.7 499.2C267 435 384 279.4 384 192C384 86 298 0 192 0S0 86 0 192c0 87.4 117 243 168.3 307.2c12.3 15.3 35.1 15.3 47.4 0zM192 128a64 64 0 1 1 0 128 64 64 0 1 1 0-128z" fill="#007bff"/>
   </svg>
 `;
 
@@ -30,7 +31,7 @@ interface MapVisualizationProps {
 
 const getIcon = () => {
   return L.divIcon({
-    html: LocationIconSVG,
+    html: LocationIconSVG, // Use the updated SVG with a blue marker
     className: 'custom-svg-icon',
     iconSize: [30, 40],
     iconAnchor: [15, 40],
@@ -72,8 +73,8 @@ const MapVisualization: React.FC<MapVisualizationProps> = ({ data }) => {
       >
         <AttributionControl position="bottomright" prefix={false} />
         <TileLayer
-          url="https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png"
-          attribution='&copy; <a href="https://stadiamaps.com/">Stadia Maps</a> contributors'
+          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         />
         {eventLocations.map((event, index) => (
           <Marker key={index} position={[event.lat, event.lng]} icon={getIcon()}>
@@ -83,7 +84,9 @@ const MapVisualization: React.FC<MapVisualizationProps> = ({ data }) => {
                 {event.details}
               </div>
             </Popup>
-            <Tooltip>{event.type}</Tooltip>
+            <Tooltip direction="top" offset={[0, -20]} opacity={1}>
+              {event.type}
+            </Tooltip>
           </Marker>
         ))}
       </MapContainer>
