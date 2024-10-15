@@ -15,8 +15,8 @@ export const fetchAstronomyPictureOfTheDay = async (params: { date?: string, sta
 export const fetchCarouselApodData = async (): Promise<any[]> => {
   try {
     const response = await fetchRetry(() =>
-      apiClient.get('http://localhost:3311/api/v1/apod?count=12')
-    );
+      apiClient.get(API_ENDPOINTS.APOD, { params: { count: 12 } })
+  );
     console.log('APOD Carousel Response:', response);
     return response.data.body;  // Assuming 'body' contains the image data array
   } catch (error) {
