@@ -9,6 +9,9 @@ class ExpressLoader {
     static init() {
         const app = express();
 
+        // Trust the first proxy (necessary when hosting behind proxies like on Render)
+        app.set('trust proxy', 1);
+
         // Helmet for basic security headers
         app.use(helmet());
 
